@@ -9,8 +9,10 @@ from readFile import get3ClassData
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+colors = ['b','g','r','orange']
 # global
-epochs = 500
+epochs = 100
 lr = 0.001
 print("Example of multi-label perceptron ")
 
@@ -59,6 +61,7 @@ total_acc = []
 dw_list = []
 np.random.seed(0)
 x, y = get3ClassData()
+y_raw = y
 y = transform_one_hot(y.astype(int))
 x_dim, y_dim = x.shape[1], y.shape[1]
 w = np.random.standard_normal([x_dim, y_dim])  # mean=0, stdev=1
@@ -103,7 +106,18 @@ def plot_step():
 
     plt.ion()
     plt.cla()
-    plt.scatter(range(len(total_acc)),total_acc)
+    plt.subplot(221)
+    plt.scatter(range(0,len(total_acc),10),total_acc[::10],color='blue')  # acc plot
+    plt.plot(range(len(total_acc)),total_acc,color='blue')
+    plt.subplot(222)
+    plt.scatter(range(0,len(total_loss),10),total_loss[::10],color='red')  # loss plot
+    plt.plot(range(len(total_loss)),total_loss,color='red')
+    plt.subplot(223)
+    for i in range(y.shape[1]):
+        xx = x[y_raw==i]
+        plt.scatter(xx[:,0],xx[:,1],s=5)
+
+    # plt.scatter(x[:,0],x[:,1],s=5)
     plt.pause(0.02)
     # plt.ioff()
     plt.show()
